@@ -10,9 +10,10 @@ class ShiftSheet:
 			'G','H','I','J','K','L','M','N','O','P','Q',
 			'R','S','T','U','V','W','X','Y','Z','AA','AB',
 			'AC','AD','AE','AF','AG','AH','AI','AJ','AK']
-		self.ATTENDANT_NUMBERS_FIELD = 'A18:B23'
+		
 		self.CHEL_SHIFT_TIME_FIELD = 'E18:E23'
 		self.MSK_SHIFT_TIME_FIELD = 'F18:F23'
+		self.ATTENDANTS = 'A18:B23'
 
 		#Sheet's fields offsets
 		self.OFFSET_START_FROM = 16
@@ -36,8 +37,8 @@ class ShiftSheet:
 			month_on_sheet += 12
 		return month_on_sheet
 
-	def __block_number(self) -> int:
-		return self.__month_on_sheet()*self.NEXT_BLOCK_OFFSET
+	#def __block_number(self, actual_month) -> int:
+	#	return self.__month_on_sheet(actual_month)*self.NEXT_BLOCK_OFFSET
 
 	def __month_offset(self, actual_month) -> int:
 		return (
@@ -52,7 +53,7 @@ class ShiftSheet:
 			self.WORK_FIELD_END_OFFSET+self.__month_offset(actual_month))
 		return [work_field_coordinate_1,work_field_coordinate_2]
 
-	def __X_coordinate(self, actual_day) -> str:
+	def __month_field_X_coordinate(self, actual_day) -> str:
 		return self.X_COORDINATES[int(actual_day)-self.DAY_OFFSET]
 
 	def post_month_name(self, actual_month) -> str:
@@ -75,7 +76,7 @@ class ShiftSheet:
 
 	def post_shift_field(self, actual_month, actual_day) -> list:
 		coordinates_Y = self.__month_field_Y_coordinates(actual_month)
-		coordinate_X = self.__X_coordinate(actual_day)
+		coordinate_X = self.__month_field_X_coordinate(actual_day)
 		field = f'{coordinate_X}{coordinates_Y[0]}:{coordinate_X}{coordinates_Y[1]}'
 		return self.googbot.post_data_from_sheet(field)
 
@@ -86,9 +87,17 @@ class ShiftSheet:
 		temp = self.googbot.post_data_from_sheet(field)
 		return [temp[i][0] for i in range(len(temp))]
 
-	def calc_shift_pairs(self, actual_month, actual_day, location) -> dict:
+	def match_names(self) -> dict:
+		attendant_numbers = self.googbot.post_data_from_sheet(self.ATTENDANTS)
+		return {item[1]:item[0] for item in attendant_numbers}
+
+	def show_day_shifts(self, actual_month, actual_day, location) -> dict:
 		shift_field = self.post_shift_field(actual_month, actual_day)
 		time_intervals = self.post_time_intervals(location)
+		attendant_numbers = self.match_names()
+		for item in shift_field:
+			if item:
+				item[0] = attendant_numbers[item[0]]
 		shift_pairs = {}
 		for k, v in zip(time_intervals,shift_field):
 			if k in shift_pairs:
@@ -98,20 +107,10 @@ class ShiftSheet:
 		return shift_pairs # dict(zip(time_intervals,shift_field))
 
 
-
+month = 'july'
+day = '01'
+location = 'CHEL'
 ss = ShiftSheet()
-month = ss.post_month_name('july')
-date_list = ss.post_date_field('july')
-shift_list = ss.post_month_field('july')
-actual_shift = ss.post_shift_field('july','01')
-date = ss.calc_shift_date('july','01')
-time_intervals = ss.post_time_intervals('CHEL')
-shift_pairs = ss.calc_shift_pairs('july','01','CHEL')
+shift_pairs = ss.show_day_shifts(month, day, location)
 
-print(f'Название месяца: {month}')
-print(f'Список дат: {date_list}')
-print(f'Список смен построчно: {shift_list}')
-print(f'Список смен в определённую дату: {actual_shift}')
-print(f'Название даты: {date}')
-print(f'Список временных интервалов: {time_intervals}')
 print(f'Время смены и дежурный: {shift_pairs}')
