@@ -24,11 +24,15 @@ class Googbot:
 		self.service = build(API_NAME, API_VERSION, http=self.creds.authorize(Http()))
 
 		# Call the Sheets API
-		try:
-			with open(SHEET_ADDRES, 'r') as f:
-				sheet_address = json.load(f)
-		except Exception:
-			raise Exception('Addres file not found...')
+		#try:
+		with open(SHEET_ADDRES, 'r') as f:
+			sheet_address = json.load(f)
+		#except JSONDecodeError as e:
+		#	print(e)
+		#except FileNotFoundError:
+		#	print(e)
+		#else Exception as e:
+		#	print(e)
 		self.SPREADSHEET_ID = sheet_address['sheet_id']
 		self.RANGE_NAME = sheet_address['list_name'] + '!{}'
 		
