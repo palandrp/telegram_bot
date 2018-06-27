@@ -4,5 +4,5 @@ credentials.json
 sheet_address.json
 token.json
 socks5.json
-myprivattoken.py
+myprivat.py
 .idea/
