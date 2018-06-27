@@ -28,7 +28,7 @@ class Googbot:
                 self.SPREADSHEET_ID = sheet_address['sheet_id']
                 self.RANGE_NAME = sheet_address['list_name'] + '!{}'
         except Exception:
-            print('Addess file not found or invalid...')
+            raise Exception('Addess file not found or invalid...')
 
     def post_data_from_sheet(self, my_sheet_range) -> list:
         result = self.service.spreadsheets().values().get(
