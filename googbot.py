@@ -1,10 +1,7 @@
-"""
-Shows basic usage of the Sheets API. Prints values from a Google Spreadsheet.
-"""
 import json
 from apiclient.discovery import build
 from httplib2 import Http
-from oauth2client import file, client, tools
+from oauth2client import file
 
 API_NAME = 'sheets'
 API_VERSION = 'v4'
@@ -25,17 +22,13 @@ class Googbot:
         self.service = build(API_NAME, API_VERSION, http=self.creds.authorize(Http()))
 
         # Call the Sheets API
-        # try:
-        with open(SHEET_ADDRES, 'r') as f:
-            sheet_address = json.load(f)
-        # except JSONDecodeError as e:
-        #	print(e)
-        # except FileNotFoundError:
-        #	print(e)
-        # else Exception as e:
-        #	print(e)
-        self.SPREADSHEET_ID = sheet_address['sheet_id']
-        self.RANGE_NAME = sheet_address['list_name'] + '!{}'
+        try:
+            with open(SHEET_ADDRES, 'r') as f:
+                sheet_address = json.load(f)
+                self.SPREADSHEET_ID = sheet_address['sheet_id']
+                self.RANGE_NAME = sheet_address['list_name'] + '!{}'
+        except Exception:
+            print('Addess file not found or invalid...')
 
     def post_data_from_sheet(self, my_sheet_range) -> list:
         result = self.service.spreadsheets().values().get(
