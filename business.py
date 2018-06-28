@@ -106,12 +106,3 @@ class ShiftSheet:
                 shift_pairs[k] = v
         return shift_pairs
 
-
-month = 'June'
-day = '26'
-location = 'CHEL'
-ss = ShiftSheet()
-shift_pairs = ss.show_day_shifts(month, day, location)
-
-print(f'Время смены и дежурный: {shift_pairs}')
-
