@@ -1,7 +1,4 @@
 import requests
-import socket
-import socks
-import json
 import myprivat
 
 
@@ -10,16 +7,6 @@ class TelegramBot:
         self.TOKEN = myprivat.token
         self.URL = 'https://api.telegram.org/'
         self.API_URL = self.URL + 'bot' + self.TOKEN + '/'
-        try:
-            with open('socks5.json', 'r') as f:
-                proxy = json.load(f)
-                socks.set_default_proxy(socks.SOCKS5, proxy['address'],
-                                        proxy['port'], True,
-                                        proxy['user'],
-                                        proxy['password'])
-                socket.socket = socks.socksocket
-        except Exception:
-            raise Exception('File "socks5.json" not found on invalid...')
 
     def get_updates(self):
         #socket.socket.connect('149.154.167.199',80)
