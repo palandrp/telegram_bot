@@ -23,21 +23,24 @@ class TelegramBot:
         except Exception:
             raise Exception('File "socks5.json" not found on invalid...')
 
-        self.URL = 'https://api.telegram.org/bot'
-        self.API_URL = self.URL + self.TOKEN + '/'
+        self.URL = 'https://api.telegram.org/'
+        self.API_URL = self.URL + 'bot' + self.TOKEN + '/'
 
     def get_updates(self):
-        socket.socket.connect('api.telegram.org',80)
-        url = self.URL + 'getUpdates'
+        #socket.socket.connect('149.154.167.199',80)
+        url = self.API_URL + 'getUpdates'
         r = requests.get(url)
         return r.json()
 
+    def send_message(self, chat_id, text):
+        url = self.API_URL + 'sendMessage?'
+        requests.get(url+'chat_id='+str(chat_id)+'&'+'text='+text)
+        return url
+
 
 def main():
-    d = TelegramBot().get_updates()
-
-    with open('updates.json', 'w') as file:
-        json.dump(d, file, indent=2, ensure_ascii=False)
+    bot = TelegramBot()
+    bot.send_message(279959271,'hell eeee!')
 
 
 if __name__ == '__main__':
