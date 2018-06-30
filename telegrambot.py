@@ -11,7 +11,9 @@ ipv6: https://toster.ru/q/441590.
 Или, возможно, снова вернуться к варианту с
 библиотекой pyTelegramBotApi и ее apihelper.proxy:
 https://toster.ru/q/524178?from=questions_similar.
-Еще есть MTProto, надо изучить.
+Еще есть MTProto, надо изучить:
+https://github.com/pyrogram/pyrogram
+https://docs.pyrogram.ml/
 (Кстати многопоточность:
 https://python-scripts.com/threading)'''
 
