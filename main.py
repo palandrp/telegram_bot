@@ -19,7 +19,6 @@ def main():
     except Exception:
         raise Exception('File "socks5.json" not found on invalid...')
     message = telebot.get_message()
-    socket.socket.close()
     if message['text'] == '/today_in_chel':
         dt = datetime.now()
         month = dt.strftime('%B')
