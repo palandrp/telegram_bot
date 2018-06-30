@@ -8,16 +8,6 @@ from telegrambot import TelegramBot
 def main():
     telebot = TelegramBot()
     googbot = ShiftSheet()
-    try:
-        with open('socks5.json', 'r') as f:
-            proxy = json.load(f)
-            socks.set_default_proxy(socks.SOCKS5, proxy['address'],
-                                    proxy['port'], True,
-                                    proxy['user'],
-                                    proxy['password'])
-            socket.socket = socks.socksocket
-    except Exception:
-        raise Exception('File "socks5.json" not found on invalid...')
     message = telebot.get_message()
     if message['text'] == '/today_in_chel':
         dt = datetime.now()
