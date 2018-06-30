@@ -9,7 +9,6 @@ class TelegramBot:
         self.API_URL = self.URL + 'bot' + self.TOKEN + '/'
 
     def get_updates(self):
-        #socket.socket.connect('149.154.167.199',80)
         url = self.API_URL + 'getUpdates'
         r = requests.get(url)
         return r.json()
@@ -22,6 +21,6 @@ class TelegramBot:
         return message
 
     def send_message(self, chat_id, text='Wait a second, please...'):
-        url = self.API_URL + 'sendMessage?'
-        requests.get(url+'chat_id='+str(chat_id)+'&'+'text='+text)
+        url = self.API_URL+'sendMessage?'+'chat_id='+str(chat_id)+'&text='+text
+        requests.get(url)
 
