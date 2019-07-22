@@ -2,3 +2,4 @@ __pycache__/
 *.json
 myprivat.py
 .idea/
+conf/prod.py
