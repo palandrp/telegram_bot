@@ -1,5 +1,5 @@
 import json
-from apiclient.discovery import build
+from googleapiclient.discovery import build
 from httplib2 import Http
 from oauth2client import file
 
@@ -28,7 +28,7 @@ class Googbot:
                 self.SPREADSHEET_ID = sheet_address['sheet_id']
                 self.RANGE_NAME = sheet_address['list_name'] + '!{}'
         except Exception:
-            raise Exception('Addess file not found or invalid...')
+            raise Exception('Address file not found or invalid...')
 
     def post_data_from_sheet(self, my_sheet_range) -> list:
         result = self.service.spreadsheets().values().get(
