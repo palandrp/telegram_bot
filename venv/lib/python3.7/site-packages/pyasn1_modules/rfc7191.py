@@ -240,22 +240,18 @@ KeyPkgIdentifierAndReceiptReq.componentType = namedtype.NamedTypes(
 )
 
 
-# Map of Attribute Type OIDs to Attributes are added to
-# the ones that are in rfc5652.py
+# Map of Attribute Type OIDs to Attributes
+# To be added to the ones that are in rfc5652.py
 
-_cmsAttributesMapUpdate = {
+cmsAttributesMapUpdate = {
     id_aa_KP_keyPkgIdAndReceiptReq: KeyPkgIdentifierAndReceiptReq(),
 }
 
-rfc5652.cmsAttributesMap.update(_cmsAttributesMapUpdate)
 
+# Map of Content Type OIDs to Content Types
+# To be added to the ones that are in rfc5652.py
 
-# Map of CMC Content Type OIDs to CMC Content Types are added to
-# the ones that are in rfc5652.py
-
-_cmsContentTypesMapUpdate = {
+cmsContentTypesMapUpdate = {
     id_ct_KP_keyPackageError: KeyPackageError(),
     id_ct_KP_keyPackageReceipt: KeyPackageReceipt(),
 }
-
-rfc5652.cmsContentTypesMap.update(_cmsContentTypesMapUpdate)

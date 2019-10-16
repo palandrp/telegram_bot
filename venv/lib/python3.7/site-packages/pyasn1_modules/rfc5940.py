@@ -42,18 +42,15 @@ class SCVPReqRes(univ.Sequence):
     pass
 
 SCVPReqRes.componentType = namedtype.NamedTypes(
-    namedtype.OptionalNamedType('request',
-        ContentInfo().subtype(explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))),
+    namedtype.OptionalNamedType('request', ContentInfo().subtype(explicitTag=tag.Tag(tag.tagClassContext, tag.tagFormatSimple, 0))),
     namedtype.NamedType('response', ContentInfo())
 )
 
 
 # Map of Revocation Info Format OIDs to Revocation Info Format
-# is added to the ones that are in rfc5652.py
+# To be added to the ones that are in rfc5652.py
 
-_otherRevInfoFormatMapUpdate = {
+otherRevInfoFormatMapUpdate = {
      id_ri_ocsp_response: OCSPResponse(),
      id_ri_scvp: SCVPReqRes(),
 }
-
-rfc5652.otherRevInfoFormatMap.update(_otherRevInfoFormatMapUpdate)

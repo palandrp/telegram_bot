@@ -206,7 +206,13 @@ class socksocket(socket.socket):
         return "\r\n".join(hdrs)
 
     def __getauthheader(self):
-        auth = self.__proxy[4] + b":" + self.__proxy[5]
+        username = self.__proxy[4]
+        password = self.__proxy[5]
+        if isinstance(username, str):
+            username = username.encode()
+        if isinstance(password, str):
+            password = password.encode()
+        auth = username + b":" + password
         return "Proxy-Authorization: Basic " + base64.b64encode(auth).decode()
 
     def setproxy(
@@ -267,13 +273,13 @@ class socksocket(socket.socket):
         elif chosenauth[1:2] == chr(0x02).encode():
             # Okay, we need to perform a basic username/password
             # authentication.
-            packet = bytearray()
-            packet.append(0x01)
-            packet.append(len(self.__proxy[4]))
-            packet.extend(self.__proxy[4])
-            packet.append(len(self.__proxy[5]))
-            packet.extend(self.__proxy[5])
-            self.sendall(packet)
+            self.sendall(
+                chr(0x01).encode()
+                + chr(len(self.__proxy[4]))
+                + self.__proxy[4]
+                + chr(len(self.__proxy[5]))
+                + self.__proxy[5]
+            )
             authstat = self.__recvall(2)
             if authstat[0:1] != chr(0x01).encode():
                 # Bad response

@@ -179,21 +179,20 @@ ub_receiptsTo = rfc2634.ub_receiptsTo
 ReceiptRequest = rfc2634.ReceiptRequest
 
 
-# Map of Attribute Type to the Attribute structure is added to the
-# ones that are in rfc5652.py
+# Map of Attribute Type to the Attribute structure
 
-_cmsAttributesMapUpdate = {
+ESSAttributeMap = rfc2634.ESSAttributeMap
+
+_ESSAttributeMapAddition = {
     id_aa_signingCertificateV2: SigningCertificateV2(),
 }
 
-rfc5652.cmsAttributesMap.update(_cmsAttributesMapUpdate)
+ESSAttributeMap.update(_ESSAttributeMapAddition)
 
 
-# Map of Content Type OIDs to Content Types is added to the
-# ones that are in rfc5652.py
+# Map of Content Type OIDs to Content Types
+# To be added to the ones that are in rfc5652.py
 
-_cmsContentTypesMapUpdate = {
+cmsContentTypesMapUpdate = {
     id_ct_receipt: Receipt(),
 }
-
-rfc5652.cmsContentTypesMap.update(_cmsContentTypesMapUpdate)

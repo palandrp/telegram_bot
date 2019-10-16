@@ -1,4 +1,4 @@
-#!/Users/kimdo/Code/infra_utils/googlebot/venv/bin/python
+#!/home/kimdo/venv/googbot/bin/python3.7
 # -*- coding: utf-8 -*-
 import re
 import sys

@@ -1,4 +1,4 @@
-#!/Users/kimdo/Code/infra_utils/googlebot/venv/bin/python
+#!/home/kimdo/venv/googbot/bin/python3.7
 # EASY-INSTALL-ENTRY-SCRIPT: 'coverage==4.4.1','console_scripts','coverage3'
 __requires__ = 'coverage==4.4.1'
 import re
