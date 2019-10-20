@@ -3,3 +3,4 @@ __pycache__/
 myprivat.py
 .idea/
 conf/prod.py
+venv/
