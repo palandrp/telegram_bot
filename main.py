@@ -1,23 +1,28 @@
 from datetime import datetime
 import socket
-#import socks
+import socks
 import json
 from business import ShiftSheet
 from telegrambot import TelegramBot
 
 def main():
-    telebot = TelegramBot()
-    googbot = ShiftSheet()
+    #telebot = TelegramBot()
+    business = ShiftSheet()
 
-    message = telebot.get_message()
-    if message['text'] == '/today_in_chel':
+    dt = datetime.now()
+    month = dt.strftime('%B')
+    day = dt.strftime('%d')
+    business.show_day_shifts(month, day, 'CHEL')
+
+    #message = telebot.get_message()
+    '''if message['text'] == '/today_in_chel':
         dt = datetime.now()
         month = dt.strftime('%B')
         day = dt.strftime('%d')
-        answer = googbot.show_day_shifts(month,day,'CHEL')
+        answer = business.show_day_shifts(month,day,'CHEL')
         print(answer)
         #telebot.send_message(279959271, msg)
-        #print(dt.strftime("%A, %d. %B %Y %I:%M%p"))
+        #print(dt.strftime("%A, %d. %B %Y %I:%M%p"))'''
 
 '''
     dt = datetime.now()
