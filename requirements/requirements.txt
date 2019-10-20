@@ -1,5 +1,7 @@
-httplib2
-oauth2client
-datetime
-requests
+#httplib2
+#oauth2client
+#datetime
+#requests
 google-api-python-client
+python-telegram-bot
+pysocks
