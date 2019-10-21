@@ -1,10 +1,10 @@
+# -*- coding: utf-8 -*-
 import json
 import pickle
 import os.path
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
-from pprint import pprint
 
 
 API_NAME = 'sheets'
@@ -51,7 +51,6 @@ class Googbot:
 
     def post_data_from_sheet(self, my_sheet_range) -> list:
         request = self.service.spreadsheets().values().get(spreadsheetId=self.SPREADSHEET_ID,
-                                                      #range="G4:H5",
                                                       range=self.RANGE_NAME.format(my_sheet_range),
                                                       valueRenderOption='FORMATTED_VALUE',
                                                       dateTimeRenderOption='SERIAL_NUMBER')
@@ -61,5 +60,3 @@ class Googbot:
         else:
             return response.get('values')
 
-
-#pprint(Googbot().post_data_from_sheet()) #DEBUG!

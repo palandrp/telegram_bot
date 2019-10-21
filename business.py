@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from googbot import Googbot
 
 
@@ -91,7 +92,7 @@ class ShiftSheet:
         else:
             raise Exception('Location not found...')
         temp = self.googbot.post_data_from_sheet(field)
-        return [temp[i][0] for i in range(0, len(temp), 2)]
+        return [temp[i][0] for i in range(len(temp))]
 
     def match_names(self) -> dict:
         """
