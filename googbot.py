@@ -49,19 +49,17 @@ class Googbot:
 
         self.service = build(API_NAME, API_VERSION, credentials=self.creds)
 
-    def post_data_from_sheet(self): #post_data_from_sheet(self, my_sheet_range):
-        #result = self.spreadsheet.values().get(
-        #    spreadsheetId=self.SPREADSHEET_ID,
-        #    range=self.RANGE_NAME.format(my_sheet_range)).execute()
-        #values = result.get('values', [])
-        #if not values:
-        #    print('No data found.')
+    def post_data_from_sheet(self, my_sheet_range) -> list:
         request = self.service.spreadsheets().values().get(spreadsheetId=self.SPREADSHEET_ID,
-                                                      range="A4:B5",
+                                                      #range="G4:H5",
+                                                      range=self.RANGE_NAME.format(my_sheet_range),
                                                       valueRenderOption='FORMATTED_VALUE',
                                                       dateTimeRenderOption='SERIAL_NUMBER')
         response = request.execute()
-        return response
+        if response.get('values') == None:
+            return ['No data found.']
+        else:
+            return response.get('values')
 
 
-pprint(Googbot().post_data_from_sheet())
+#pprint(Googbot().post_data_from_sheet()) #DEBUG!

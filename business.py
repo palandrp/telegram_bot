@@ -7,24 +7,24 @@ class ShiftSheet:
             'Yanuar', 'Februar', 'March', 'April', 'May', 'June',
             'Jule', 'August', 'September', 'October', 'November', 'December']
         self.X_COORDINATES = [
-            'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
+            'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
             'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z', 'AA', 'AB',
-            'AC', 'AD', 'AE', 'AF', 'AG', 'AH', 'AI', 'AJ', 'AK']
+            'AC', 'AD', 'AE', 'AF', 'AG']
 
-        self.CHEL_SHIFT_TIME_FIELD = 'E18:E23'
-        self.MSK_SHIFT_TIME_FIELD = 'F18:F23'
-        self.ATTENDANTS = 'A18:B23'
+        self.CHEL_SHIFT_TIME_FIELD = 'A15:A20'
+        self.MSK_SHIFT_TIME_FIELD = 'B15:E20'
+        self.ATTENDANTS = 'A4:B10'
 
         # Sheet's fields offsets
-        self.OFFSET_START_FROM = 16
+        self.OFFSET_START_FROM = 13
         self.WORK_FIELD_START_OFFSET = 2
-        self.WORK_FIELD_END_OFFSET = 8
-        self.DATE_FIELD_OFFSET = 1
+        self.WORK_FIELD_END_OFFSET = 7
+        self.DATE_FIELD_OFFSET = 2
         self.NEXT_BLOCK_OFFSET = 9
         self.DAY_OFFSET = 1
 
         # Date offset
-        self.MONTH_OFFSET = 5
+        self.MONTH_OFFSET = 0
 
         self.FIELD_TEMTLATE = 'G{}:AK{}'
         self.MONTH_NAME_TEMPLATE = 'A{}'
@@ -78,16 +78,26 @@ class ShiftSheet:
         return self.googbot.post_data_from_sheet(field)
 
     def post_time_intervals(self, location='MSK') -> list:
-        if (location == 'MSK'):
+        """
+        This function returns list of strings which presents itself a time interval for the shifts.
+        Because of structure of the data it returns every second entrance of time interval in the table.
+        :param location:
+        :return:
+        """
+        if location == 'MSK':     # TODO It had hardcoded, it is not good...
             field = self.MSK_SHIFT_TIME_FIELD
-        elif (location == 'CHEL'):
+        elif location == 'CHEL':
             field = self.CHEL_SHIFT_TIME_FIELD
         else:
             raise Exception('Location not found...')
         temp = self.googbot.post_data_from_sheet(field)
-        return [temp[i][0] for i in range(len(temp))]
+        return [temp[i][0] for i in range(0, len(temp), 2)]
 
     def match_names(self) -> dict:
+        """
+        This function maps the name of attendant and his serial number.
+        :return:
+        """
         attendant_numbers = self.googbot.post_data_from_sheet(self.ATTENDANTS)
         return {item[1]: item[0] for item in attendant_numbers}
 

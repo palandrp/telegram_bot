@@ -1,9 +1,10 @@
 from datetime import datetime
-import socket
-import socks
-import json
+#import socket
+#import socks
+#import json
 from business import ShiftSheet
-from telegrambot import TelegramBot
+#from telegrambot import TelegramBot
+from pprint import pprint
 
 def main():
     #telebot = TelegramBot()
@@ -12,7 +13,7 @@ def main():
     dt = datetime.now()
     month = dt.strftime('%B')
     day = dt.strftime('%d')
-    business.show_day_shifts(month, day, 'CHEL')
+    pprint(business.show_day_shifts(month, day, 'CHEL'))
 
     #message = telebot.get_message()
     '''if message['text'] == '/today_in_chel':
