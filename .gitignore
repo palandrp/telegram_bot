@@ -4,4 +4,5 @@ myprivat.py
 .idea/
 conf/prod.py
 venv/
+.venv
 token*
