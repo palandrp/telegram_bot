@@ -102,7 +102,7 @@ class ShiftSheet:
         attendant_numbers = self.googbot.post_data_from_sheet(self.ATTENDANTS)
         return {item[1]: item[0] for item in attendant_numbers}
 
-    def show_day_shifts(self, actual_month, actual_day, location) -> dict:
+    def show_day_shifts(self, actual_month, actual_day, location) -> str:
         shift_field = self.post_shift_field(actual_month, actual_day)
         time_intervals = self.post_time_intervals(location)
         attendant_numbers = self.match_names()
@@ -115,5 +115,11 @@ class ShiftSheet:
                 shift_pairs[k] += v
             else:
                 shift_pairs[k] = v
-        return shift_pairs
+        text = ''
+        for key in shift_pairs:
+            names = ''
+            for val in shift_pairs[key]:
+                names += '{}\n'.format(val)
+            text += '{}:\n{}\n'.format(key, names)
+        return text
 
