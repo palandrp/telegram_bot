@@ -5,7 +5,7 @@ from datetime import datetime
 from business import ShiftSheet
 from telegram.ext import MessageHandler, Filters
 import logging
-import myprivat
+from config import myprivat
 
 
 class TelegramBot:

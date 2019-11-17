@@ -1,6 +1,6 @@
 __pycache__/
 *.json
-myprivat.py
+config/myprivat.py
 .idea/
 conf/prod.py
 venv/
