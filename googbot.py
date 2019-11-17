@@ -9,8 +9,8 @@ from google.auth.transport.requests import Request
 
 API_NAME = 'sheets'
 API_VERSION = 'v4'
-API_CREDANTIALS = 'credentials.json'
-SHEET_ADDRES = 'sheet_address.json'
+API_CREDANTIALS = 'config/credentials.json'
+SHEET_ADDRES = 'config/sheet_address.json'
 
 
 class Googbot:
