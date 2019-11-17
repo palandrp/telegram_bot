@@ -4,7 +4,7 @@ from pprint import pprint
 from business import ShiftSheet
 
 
-def main():
+def tests():
     business = ShiftSheet()
 
     dt = datetime.now()
@@ -13,5 +13,4 @@ def main():
     pprint(business.show_day_shifts(month, day, 'CHEL'))
 
 
-if __name__ == '__main__':
-    main()
+tests()
