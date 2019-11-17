@@ -1,15 +1,18 @@
 # -*- coding: utf-8 -*-
 from config import myprivat
-from telegram import ChatAction
+from telegram import ParseMode, \
+                     ChatAction
 from telegram.ext import Updater, \
                          CommandHandler, \
                          MessageHandler, \
                          Filters
+from telegram.utils.helpers import mention_html
 from datetime import datetime
 from business import ShiftSheet
 from functools import wraps
 import traceback
 import logging
+import sys
 
 
 class TelegramBot:
@@ -24,7 +27,7 @@ class TelegramBot:
             }
         }
 
-        self.DEV_IDs = [myprivat.devid]
+        self.DEV_IDs = myprivat.devid
 
         def error(update, context):
             devs = self.DEV_IDs
@@ -84,7 +87,8 @@ class TelegramBot:
                 context.bot.send_message(chat_id=update.effective_chat.id,
                                          text="Available commands:\n"
                                               "/who_is_duty_today_chel\n"
-                                              "/who_is_duty_today_msk")
+                                              "/who_is_duty_today_msk",
+                                         parse_mode=ParseMode.HTML)
             except:
                 error(update, context)
 
@@ -92,7 +96,8 @@ class TelegramBot:
         def echo(update, context):
             try:
                 context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=update.message.text)
+                                         text=update.message.text,
+                                         parse_mode=ParseMode.HTML)
             except:
                 error(update, context)
 
@@ -100,7 +105,8 @@ class TelegramBot:
         def unknown(update, context):
             try:
                 context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text="Sorry, I didn't understand that command.")
+                                         text="Sorry, I didn't understand that command.",
+                                         parse_mode=ParseMode.HTML)
             except:
                 error(update, context)
 
@@ -112,7 +118,8 @@ class TelegramBot:
                 day = dt.strftime('%d')
                 text = business.show_day_shifts(month, day, 'CHEL')
                 context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=text)
+                                         text=text,
+                                         parse_mode=ParseMode.HTML)
             except:
                 error(update, context)
 
@@ -124,7 +131,8 @@ class TelegramBot:
                 day = dt.strftime('%d')
                 text = business.show_day_shifts(month, day, 'MSK')
                 context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=text)
+                                         text=text,
+                                         parse_mode=ParseMode.HTML)
             except:
                 error(update, context)
 
