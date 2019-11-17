@@ -3,6 +3,7 @@ from telegram.ext import Updater
 from telegram.ext import CommandHandler
 from datetime import datetime
 from business import ShiftSheet
+from telegram.ext import MessageHandler, Filters
 import logging
 import myprivat
 
@@ -29,11 +30,20 @@ class TelegramBot:
 
         business = ShiftSheet()
 
+
         def start(update, context):
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text="Available commands:\n"
                                           "/who_is_duty_today_chel\n"
                                           "/who_is_duty_today_msk")
+
+        def echo(update, context):
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text=update.message.text)
+
+        def unknown(update, context):
+            context.bot.send_message(chat_id=update.effective_chat.id,
+                                     text="Sorry, I didn't understand that command.")
 
         def who_is_duty_today_ch(update, context):
             dt = datetime.now()
@@ -51,13 +61,20 @@ class TelegramBot:
             context.bot.send_message(chat_id=update.effective_chat.id,
                                      text=text)
 
+
         start_handler = CommandHandler('start', start)
+        echo_handler = MessageHandler(Filters.text, echo)
         who_is_duty_today_ch_handler = CommandHandler('who_is_duty_today_chel', who_is_duty_today_ch)
         who_is_duty_today_ms_handler = CommandHandler('who_is_duty_today_msk', who_is_duty_today_ms)
+        unknown_handler = MessageHandler(Filters.command, unknown)
+
 
         dispatcher.add_handler(start_handler)
+        dispatcher.add_handler(echo_handler)
         dispatcher.add_handler(who_is_duty_today_ch_handler)
         dispatcher.add_handler(who_is_duty_today_ms_handler)
+        dispatcher.add_handler(unknown_handler)
+
 
         updater.start_polling()
 
