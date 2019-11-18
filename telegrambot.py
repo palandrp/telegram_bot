@@ -1,15 +1,20 @@
 # -*- coding: utf-8 -*-
 from config import myprivat
 from telegram import ParseMode, \
-                     ChatAction
+                     ChatAction, \
+                     InlineQueryResultArticle, \
+                     InputTextMessageContent
 from telegram.ext import Updater, \
                          CommandHandler, \
                          MessageHandler, \
-                         Filters
-from telegram.utils.helpers import mention_html
+                         Filters, \
+                         InlineQueryHandler
+from telegram.utils.helpers import mention_html, \
+                                   escape_markdown
 from datetime import datetime
 from business import ShiftSheet
 from functools import wraps
+from uuid import uuid4
 import traceback
 import logging
 import sys
@@ -136,6 +141,26 @@ class TelegramBot:
             except:
                 error(update, context)
 
+        def inlinequery(update, context):
+            dt = datetime.now()
+            month = dt.strftime('%B')
+            day = dt.strftime('%d')
+            results = [
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title="Who is on duty today? (Moscow time)",
+                    input_message_content=InputTextMessageContent(
+                        business.show_day_shifts(month, day, 'MSK')
+                    )),
+                InlineQueryResultArticle(
+                    id=uuid4(),
+                    title="Who is on duty today? (Chelyabinsk time)",
+                    input_message_content=InputTextMessageContent(
+                        business.show_day_shifts(month, day, 'CHEL')
+                    ))
+            ]
+            update.inline_query.answer(results)
+
 
         start_handler = CommandHandler('start', start)
         echo_handler = MessageHandler(Filters.text, echo)
@@ -149,6 +174,7 @@ class TelegramBot:
         dispatcher.add_handler(who_is_duty_today_ch_handler)
         dispatcher.add_handler(who_is_duty_today_ms_handler)
         dispatcher.add_handler(unknown_handler)
+        dispatcher.add_handler(InlineQueryHandler(inlinequery))
 
 
         updater.start_polling()
