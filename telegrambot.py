@@ -33,10 +33,10 @@ class TelegramBot:
 
         self.DEV_IDs = myprivat.devid
 
-        #        logging.basicConfig(
-        #            filename='/var/log/lanit_shifts_bot/lanit-shifts.log',
-        #            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-        #            level=logging.INFO)
+        logging.basicConfig(
+            filename='/var/log/lanit_shifts_bot/lanit-shifts.log',
+            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+            level=logging.INFO)
 
         def error(update, context):
             devs = self.DEV_IDs
