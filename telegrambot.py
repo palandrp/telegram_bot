@@ -9,8 +9,7 @@ from telegram.ext import Updater, \
                          MessageHandler, \
                          Filters, \
                          InlineQueryHandler
-from telegram.utils.helpers import mention_html, \
-                                   escape_markdown
+from telegram.utils.helpers import mention_html
 from datetime import datetime
 from business import ShiftSheet
 from functools import wraps
@@ -33,6 +32,11 @@ class TelegramBot:
         }
 
         self.DEV_IDs = myprivat.devid
+
+        #        logging.basicConfig(
+        #            filename='/var/log/lanit_shifts_bot/lanit-shifts.log',
+        #            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
+        #            level=logging.INFO)
 
         def error(update, context):
             devs = self.DEV_IDs
@@ -59,11 +63,6 @@ class TelegramBot:
                 context.bot.send_message(dev_id, text, parse_mode=ParseMode.HTML)
             raise
 
-        logging.basicConfig(
-            filename='/var/log/lt-bot/lt-bot.log',
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            level=logging.INFO)
-
         def send_action(action):
             def decorator(func):
                 @wraps(func)
@@ -76,32 +75,12 @@ class TelegramBot:
             return decorator
         send_typing_action = send_action(ChatAction.TYPING)
 
-        updater = Updater(token=self.TOKEN, use_context=True,
-                          request_kwargs=self.REQUEST_KWARGS)
-        dispatcher = updater.dispatcher
-
-        logging.basicConfig(
-            format='%(asctime)s - %(name)s - %(levelname)s - %(message)s',
-            level=logging.INFO)
-
-        business = ShiftSheet()
-
         @send_typing_action
         def start(update, context):
             try:
                 context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text="Available commands:\n"
-                                              "/who_is_duty_today_chel\n"
-                                              "/who_is_duty_today_msk",
-                                         parse_mode=ParseMode.HTML)
-            except:
-                error(update, context)
-
-        @send_typing_action
-        def echo(update, context):
-            try:
-                context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=update.message.text,
+                                         text="Наберите '@имя_бота' и пробел,\n"
+                                              "загрузятся доступные варианты.",
                                          parse_mode=ParseMode.HTML)
             except:
                 error(update, context)
@@ -115,32 +94,7 @@ class TelegramBot:
             except:
                 error(update, context)
 
-        @send_typing_action
-        def who_is_duty_today_ch(update, context):
-            try:
-                dt = datetime.now()
-                month = dt.strftime('%B')
-                day = dt.strftime('%d')
-                text = business.show_day_shifts(month, day, 'CHEL')
-                context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=text,
-                                         parse_mode=ParseMode.HTML)
-            except:
-                error(update, context)
-
-        @send_typing_action
-        def who_is_duty_today_ms(update, context):
-            try:
-                dt = datetime.now()
-                month = dt.strftime('%B')
-                day = dt.strftime('%d')
-                text = business.show_day_shifts(month, day, 'MSK')
-                context.bot.send_message(chat_id=update.effective_chat.id,
-                                         text=text,
-                                         parse_mode=ParseMode.HTML)
-            except:
-                error(update, context)
-
+        business = ShiftSheet()
         def inlinequery(update, context):
             dt = datetime.now()
             month = dt.strftime('%B')
@@ -148,34 +102,29 @@ class TelegramBot:
             results = [
                 InlineQueryResultArticle(
                     id=uuid4(),
-                    title="Who is on duty today? (Moscow time)",
+                    title="Кто сегодня на смене? (время Мск)",
                     input_message_content=InputTextMessageContent(
                         business.show_day_shifts(month, day, 'MSK')
                     )),
                 InlineQueryResultArticle(
                     id=uuid4(),
-                    title="Who is on duty today? (Chelyabinsk time)",
+                    title="Кто сегодня на смене? (время Члб)",
                     input_message_content=InputTextMessageContent(
                         business.show_day_shifts(month, day, 'CHEL')
                     ))
             ]
             update.inline_query.answer(results)
 
+        updater = Updater(token=self.TOKEN, use_context=True,
+                          request_kwargs=self.REQUEST_KWARGS)
+        dispatcher = updater.dispatcher
 
         start_handler = CommandHandler('start', start)
-        echo_handler = MessageHandler(Filters.text, echo)
-        who_is_duty_today_ch_handler = CommandHandler('who_is_duty_today_chel', who_is_duty_today_ch)
-        who_is_duty_today_ms_handler = CommandHandler('who_is_duty_today_msk', who_is_duty_today_ms)
         unknown_handler = MessageHandler(Filters.command, unknown)
 
-
         dispatcher.add_handler(start_handler)
-        dispatcher.add_handler(echo_handler)
-        dispatcher.add_handler(who_is_duty_today_ch_handler)
-        dispatcher.add_handler(who_is_duty_today_ms_handler)
         dispatcher.add_handler(unknown_handler)
         dispatcher.add_handler(InlineQueryHandler(inlinequery))
-
 
         updater.start_polling()
 
