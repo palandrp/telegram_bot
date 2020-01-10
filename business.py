@@ -5,7 +5,7 @@ from googbot import Googbot
 class ShiftSheet:
     def __init__(self):
         self.MONTHS = [
-            'Yanuar', 'Februar', 'March', 'April', 'May', 'June',
+            'January', 'Februar', 'March', 'April', 'May', 'June',
             'Jule', 'August', 'September', 'October', 'November', 'December']
         self.X_COORDINATES = [
             'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q',
